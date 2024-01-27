@@ -1,6 +1,6 @@
 <?php
 
-require 'connect-indah.php';
+require 'connect-localhost.php';
 require 'rb-mysql.php';
 
 R::setup(
@@ -10,6 +10,17 @@ R::setup(
 );
 
 header('Content-Type: application/json');
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+// header('Access-Control-Allow-Origin: *'); // PRODUCTION: https://missubot-worker.seventan.workers.dev
+// header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// header('Vary: origin');
+
+// handle POST request
+// Takes raw data from the request
+$postBody = file_get_contents('php://input');
+
+// Converts JSON into a PHP object
+$post = json_decode($postBody);
 
 // get storage
 $storageId = $_GET['id'];
@@ -19,14 +30,14 @@ if (isset($storageId) && !empty($storageId)) {
 }
 
 // add storage
-$storageName = $_POST['name'];
+$storageName = $post->name;
 if (isset($storageName) && !empty($storageName)) {
     echo addStorage($storageName);
     return;
 }
 
 // delete storage
-$removeStorageId = $_POST['removeId'];
+$removeStorageId = $post->removeId;
 if (isset($removeStorageId) && !empty($removeStorageId)) {
     echo deleteStorage($removeStorageId);
     return;

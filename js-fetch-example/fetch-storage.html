@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch</title>
+</head>
+
+<body>
+    <h2>Get storage by id</h2>
+    <div id="storage-id">Nothing found. database problem?</div>
+
+    <h2>Get storages</h2>
+    <div id="storage-block">Empty storage block. database problem?</div>
+
+    <h2>Add "storage 1"</h2>
+    <div id="add-storage">Nothing added. database problem?</div>
+
+    <h2>Remove "storage 1"</h2>
+    <div id="remove-storage">Nothing removed. database problem?</div>
+
+    <script type="text/javascript">
+        // API url
+        const url = new URL('http://localhost/redbeanphp-crud/storage.php')
+        const request = new Request(url.toString())
+
+        // EXAMPLE - GET 
+        async function getStorageId(id) {
+            const requestStorageId = url.toString().concat(`?id=${id}`)
+            console.log(requestStorageId)
+            // GET Request init
+            const reqInit = {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            }
+
+            // GET Request
+            const data = await fetch("http://localhost/redbeanphp-crud/storage.php?id=kitchen_1", reqInit).then(response => response.json())
+
+            // Print data
+            const block = document.getElementById('storage-id')
+            block.innerHTML = JSON.stringify(data, null, 2)
+        }
+
+        // EXAMPLE - GET 
+        async function getStorage() {
+            // GET Request init
+            const reqInit = {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            }
+
+            // GET Request
+            const data = await fetch(request, reqInit).then(response => response.json())
+
+            // Print data
+            const block = document.getElementById('storage-block')
+            block.innerHTML = JSON.stringify(data, null, 2)
+        }
+
+        // EXAMPLE - POST 
+        async function addStorage() {
+            // POST Request init
+            const reqInit = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: 'storage 1',
+                })
+            }
+
+            // POST Request
+            const data = await fetch(request, reqInit).then(response => response.json())
+
+            // Print data
+            const block = document.getElementById('add-storage')
+            block.innerHTML = JSON.stringify(data, null, 2)
+        }
+
+
+        // EXAMPLE - POST 
+        async function removeStorage() {
+            // POST Request init
+            const reqInit = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    removeId: 'storage_1',
+                })
+            }
+
+            // POST Request
+            const data = await fetch(request, reqInit).then(response => response.json())
+
+            // Print data
+            const block = document.getElementById('remove-storage')
+            block.innerHTML = JSON.stringify(data, null, 2)
+        }
+
+        getStorageId('kitchen_1')
+        getStorage()
+        addStorage().then(() => removeStorage())
+
+    </script>
+</body>
+
+</html>
